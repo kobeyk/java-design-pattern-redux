@@ -18,6 +18,7 @@ public class DefaultEnhancer implements DispatchEnhancer{
 
     @Override
     public SyncAction enhancerDispatch(IStore store, IReduxAction action) throws Exception {
+        System.out.println("====默认dispatch增强器调用");
         if (action instanceof AsyncAction){
             throw new RuntimeException("不支持异步action！");
         }

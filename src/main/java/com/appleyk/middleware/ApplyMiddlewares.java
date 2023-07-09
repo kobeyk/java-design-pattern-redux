@@ -49,11 +49,11 @@ public class ApplyMiddlewares implements IStore {
 
     @Override
     public SyncAction dispatch(IReduxAction action) throws Exception {
-        for (DispatchEnhancer middleware : middlewares) {
-            SyncAction syncAction = middleware.enhancerDispatch(delegate, action);
-            action = syncAction;
+        if (this.middlewares.length == 0){
+            throw  new RuntimeException("中间件不能为空！");
         }
-        return (SyncAction)action;
+        SyncAction syncAction = middlewares[0].enhancerDispatch(delegate, action);
+        return syncAction;
     }
 
 
