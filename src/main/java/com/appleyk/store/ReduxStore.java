@@ -5,6 +5,7 @@ import com.appleyk.action.AsyncCallBack;
 import com.appleyk.action.IReduxAction;
 import com.appleyk.action.SyncAction;
 import com.appleyk.listener.IReduxListener;
+import com.appleyk.middleware.ApplyMiddlewares;
 import com.appleyk.reducer.IReduxReducer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,9 +30,17 @@ public class ReduxStore implements IStore{
     private IReduxReducer currentReducer;
     private List<IReduxListener> listeners = new ArrayList<>();
 
+    private ApplyMiddlewares enhancerStore;
+
     public ReduxStore(IReduxReducer reducer){
         this.currentReducer = reducer;
         this.currentState = reducer.getState();
+    }
+
+    public ReduxStore(IReduxReducer reducer,ApplyMiddlewares store){
+        this.currentReducer = reducer;
+        enhancerStore = store;
+        enhancerStore.setDelegate(this);
     }
 
     @Override
@@ -41,6 +50,9 @@ public class ReduxStore implements IStore{
 
     @Override
     public SyncAction dispatch(IReduxAction action) throws Exception{
+        if (enhancerStore != null){
+            return enhancerStore.dispatch(action);
+        }
         if (action instanceof AsyncAction){
             throw new RuntimeException("store无法处理异步Action！");
         }
@@ -76,5 +88,15 @@ public class ReduxStore implements IStore{
     @Override
     public void removeListener(IReduxListener listener) {
         this.listeners.remove(listener);
+    }
+
+    @Override
+    public IReduxReducer getReducer() {
+        return currentReducer;
+    }
+
+    @Override
+    public void setState(int state) {
+        this.currentState = state;
     }
 }

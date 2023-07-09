@@ -11,5 +11,5 @@ package com.appleyk.action;
  */
 @FunctionalInterface
 public interface AsyncCallBack {
-    void onComplete(SyncAction action);
+    void onComplete(SyncAction action) throws Exception;
 }

@@ -1,7 +1,9 @@
 package com.appleyk.store;
 
 import com.appleyk.action.IReduxAction;
+import com.appleyk.action.SyncAction;
 import com.appleyk.listener.IReduxListener;
+import com.appleyk.reducer.IReduxReducer;
 
 /**
  * <p></p>
@@ -14,7 +16,9 @@ import com.appleyk.listener.IReduxListener;
  */
 public interface IStore {
     int getState();
-    IReduxAction dispatch(IReduxAction action) throws Exception;
+    void setState(int state);
+    SyncAction dispatch(IReduxAction action) throws Exception;
+    default IReduxReducer getReducer(){return null;}
     void subscribe(IReduxListener listener);
     void removeListener(IReduxListener listener);
 }
