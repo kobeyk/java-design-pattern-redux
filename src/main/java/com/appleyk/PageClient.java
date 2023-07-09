@@ -28,6 +28,9 @@ public class PageClient {
     public static void testSyncAction() throws Exception{
         CountReducer reducer = new CountReducer(1);
         ReduxStore store = new ReduxStore(reducer);
+        store.subscribe(state -> {
+            System.out.println("dispatch触发了监听器调用，state值发生了变更");
+        });
         SyncAction action = store.dispatch(new SyncAction(CountReducer.ADD, 20));
         System.out.println("state = "+store.getState());
         System.out.println(action);
