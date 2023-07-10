@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * <p>同步Action（对象）</p>
+ * <p>同步Action（POJO）</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -15,7 +15,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SyncAction implements IReduxAction {
+    /**类型*/
     private String type;
+    /**数据载体*/
     private Integer payload;
 
     @Override

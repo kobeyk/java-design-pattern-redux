@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * <p>数值操作reducer</p>
+ * <p>计数器reducer，state归并操作</p>
  *
  * @author Appleyk
  * @version v1.0

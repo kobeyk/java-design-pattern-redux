@@ -2,11 +2,10 @@ package com.appleyk.middleware;
 
 import com.appleyk.action.IReduxAction;
 import com.appleyk.action.SyncAction;
-import com.appleyk.reducer.IReduxReducer;
 import com.appleyk.store.IStore;
 
 /**
- * <p></p>
+ * <p>dispatch增强器接口，定义两个方法</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -14,7 +13,9 @@ import com.appleyk.store.IStore;
  * @github https://github.com/kobeyk
  * @date created on 2023/7/9:20:57
  */
-public interface DispatchEnhancer {
+public interface IDispatchEnhancer {
+    /**增强dispatch*/
     SyncAction enhancerDispatch(IStore store,IReduxAction action) throws Exception;
-    default void next(DispatchEnhancer enhancer){}
+    /**设置中间件（dispatch增强器）的next*/
+    default void next(IDispatchEnhancer enhancer){}
 }

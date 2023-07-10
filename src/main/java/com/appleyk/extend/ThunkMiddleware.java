@@ -1,9 +1,9 @@
-package com.appleyk.middleware;
+package com.appleyk.extend;
 
 import com.appleyk.action.AsyncAction;
-import com.appleyk.action.AsyncCallBack;
 import com.appleyk.action.IReduxAction;
 import com.appleyk.action.SyncAction;
+import com.appleyk.middleware.IDispatchEnhancer;
 import com.appleyk.store.IStore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * <p></p>
+ * <p>处理异步Action的中间件</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -26,11 +25,11 @@ import java.util.concurrent.atomic.AtomicReference;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ThunkMiddleware implements DispatchEnhancer{
+public class ThunkMiddleware implements IDispatchEnhancer {
     ExecutorService executor = Executors.newFixedThreadPool(10);
-    private DispatchEnhancer delegate;
+    private IDispatchEnhancer delegate;
 
-    public ThunkMiddleware(DispatchEnhancer enhancer){
+    public ThunkMiddleware(IDispatchEnhancer enhancer){
         this.delegate = enhancer;
     }
 
@@ -55,7 +54,7 @@ public class ThunkMiddleware implements DispatchEnhancer{
     }
 
     @Override
-    public void next(DispatchEnhancer enhancer) {
+    public void next(IDispatchEnhancer enhancer) {
         this.delegate = enhancer;
     }
 }

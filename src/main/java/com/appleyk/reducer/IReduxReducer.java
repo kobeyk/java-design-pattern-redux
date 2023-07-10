@@ -1,10 +1,9 @@
 package com.appleyk.reducer;
 
-import com.appleyk.action.IReduxAction;
 import com.appleyk.action.SyncAction;
 
 /**
- * <p></p>
+ * <p>reducer接口</p>
  *
  * @author Appleyk
  * @version v1.0

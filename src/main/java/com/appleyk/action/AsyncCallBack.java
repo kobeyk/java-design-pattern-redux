@@ -1,7 +1,7 @@
 package com.appleyk.action;
 
 /**
- * <p>异步Action处理完回调函数</p>
+ * <p>异步Action处理完回调函数式接口</p>
  *
  * @author Appleyk
  * @version v1.0

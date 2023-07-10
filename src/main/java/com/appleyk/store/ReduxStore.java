@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>状态管理容器</p>
+ * <p>基于redux源码思路模拟的一个状态管理容器默认实现</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -26,10 +26,14 @@ import java.util.List;
 @AllArgsConstructor
 public class ReduxStore implements IStore{
 
+    /**当前管理的state*/
     private int currentState;
+    /**当前处理state的reducer，redux源码中是一个map集合，reducer和state是成对的，简单起见这里不搞map那一套*/
     private IReduxReducer currentReducer;
+    /**state监听器列表*/
     private List<IReduxListener> listeners = new ArrayList<>();
 
+    /**store增强器（利用中间件实现dispatch的增强）*/
     private ApplyMiddlewares enhancerStore;
 
     public ReduxStore(IReduxReducer reducer){
@@ -40,6 +44,7 @@ public class ReduxStore implements IStore{
     public ReduxStore(IReduxReducer reducer,ApplyMiddlewares store){
         this.currentReducer = reducer;
         enhancerStore = store;
+        /**这个很关键，要把当前的store对象传给ApplyMiddlewares，以便链式调用中间件的时候可以拿到store的一些成员变量*/
         enhancerStore.setDelegate(this);
     }
 
@@ -50,6 +55,7 @@ public class ReduxStore implements IStore{
 
     @Override
     public SyncAction dispatch(IReduxAction action) throws Exception{
+        /**看redux源码知道，如果store增强器不空且不是函数的话，最终store的功能将会被增强store所代替*/
         if (enhancerStore != null){
             return enhancerStore.dispatch(action);
         }
@@ -57,11 +63,17 @@ public class ReduxStore implements IStore{
             throw new RuntimeException("store无法处理异步Action！");
         }
         SyncAction syncAction = (SyncAction) action;
+        /**调用合适的reducer操作state并拿到操作后的state*/
         int state = currentReducer.reduce(currentState, syncAction);
+        /**更新store中的state*/
         this.currentState = state;
+        /**回调所有state监听器，告诉他们store中的state发生了变更*/
         notifyListeners();
         return syncAction;
     }
+
+    /**v1.0版本临时解决store无法处理action的问题而增加的一个方法，主要用来处理AsyncAction，v2.0中标识为已废弃*/
+    @Deprecated
     public void dispatchAsync(AsyncAction asyncAction, AsyncCallBack callBack) throws Exception{
         new Thread(()->{
             int result = asyncAction.execute();

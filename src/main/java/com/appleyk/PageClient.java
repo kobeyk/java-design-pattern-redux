@@ -1,20 +1,17 @@
 package com.appleyk;
 
 import com.appleyk.action.AsyncAction;
-import com.appleyk.action.AsyncCallBack;
-import com.appleyk.action.IReduxAction;
 import com.appleyk.action.SyncAction;
+import com.appleyk.extend.LoggerAMiddleware;
 import com.appleyk.middleware.ApplyMiddlewares;
-import com.appleyk.middleware.DefaultEnhancer;
-import com.appleyk.middleware.LoggerMiddleware;
-import com.appleyk.middleware.ThunkMiddleware;
+import com.appleyk.middleware.IDefaultEnhancer;
+import com.appleyk.extend.LoggerBMiddleware;
+import com.appleyk.extend.ThunkMiddleware;
 import com.appleyk.reducer.CountReducer;
 import com.appleyk.store.ReduxStore;
 
-import javax.swing.*;
-
 /**
- * <p>测试</p>
+ * <p>Java版redux功能测试</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -27,9 +24,13 @@ public class PageClient {
     private static CountReducer reducer = new CountReducer(1);
 
     public static void main(String[] args) throws Exception{
+//        testSyncAction();
+//        testAsyncAction();
+//        testSyncActionPlus();
         testAsyncActionPlus();
     }
 
+    /**测试同步Action（不带中间件，v1.0版本测试遗留）*/
     public static void testSyncAction() throws Exception{
         ReduxStore store = new ReduxStore(reducer);
         store.subscribe(state -> {
@@ -40,6 +41,7 @@ public class PageClient {
         System.out.println(action);
     }
 
+    /**测试异步Action（不带中间件，v1.0版本测试遗留）*/
     public static void testAsyncAction() throws Exception{
         ReduxStore store = new ReduxStore(reducer);
         store.dispatchAsync(new AsyncAction(), action -> {
@@ -48,19 +50,23 @@ public class PageClient {
         });
     }
 
+    /**测试同步Action（带中间件，v2.0版本测试遗留）*/
     public static void testSyncActionPlus() throws Exception{
-        LoggerMiddleware loggerMiddleware = new LoggerMiddleware(new DefaultEnhancer());
-        ApplyMiddlewares applyMiddlewares = new ApplyMiddlewares(loggerMiddleware);
+        LoggerBMiddleware loggerBMiddleware = new LoggerBMiddleware(new IDefaultEnhancer());
+        ApplyMiddlewares applyMiddlewares = new ApplyMiddlewares(loggerBMiddleware);
         ReduxStore store = new ReduxStore(reducer,applyMiddlewares);
         SyncAction action = store.dispatch(new SyncAction(CountReducer.ADD, 20));
         System.out.println("state = "+store.getState());
         System.out.println(action);
     }
 
+    /**测试异步Action（带中间件，v2.0版本测试遗留）*/
     public static void testAsyncActionPlus() throws Exception{
-        LoggerMiddleware loggerMiddleware = new LoggerMiddleware();
+
+        LoggerBMiddleware loggerBMiddleware = new LoggerBMiddleware();
         ThunkMiddleware thunkMiddleware = new ThunkMiddleware();
-        ApplyMiddlewares applyMiddlewares = new ApplyMiddlewares(loggerMiddleware,thunkMiddleware);
+        LoggerAMiddleware loggerAMiddleware = new LoggerAMiddleware();
+        ApplyMiddlewares applyMiddlewares = new ApplyMiddlewares(loggerBMiddleware,thunkMiddleware,loggerAMiddleware);
         ReduxStore store = new ReduxStore(reducer,applyMiddlewares);
         SyncAction action = store.dispatch(new AsyncAction());
         System.out.println("state = "+store.getState());

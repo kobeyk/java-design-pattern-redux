@@ -3,13 +3,12 @@ package com.appleyk.middleware;
 import com.appleyk.action.IReduxAction;
 import com.appleyk.action.SyncAction;
 import com.appleyk.listener.IReduxListener;
-import com.appleyk.reducer.IReduxReducer;
 import com.appleyk.store.IStore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * <p>store增强器</p>
+ * <p>store增强器，主要利用责任链插件（中间件）思想来增强dispatch</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -21,17 +20,21 @@ import lombok.Data;
 @AllArgsConstructor
 public class ApplyMiddlewares implements IStore {
 
+    /**store代理对象*/
     private IStore delegate;
 
-    private DispatchEnhancer[] middlewares;
+    /**dispatch增强器中间件数组*/
+    private IDispatchEnhancer[] middlewares;
 
-    public ApplyMiddlewares(DispatchEnhancer... middlewares){
+    public ApplyMiddlewares(IDispatchEnhancer... middlewares){
         this.middlewares = middlewares;
         int len = middlewares.length;
         for (int i = 0; i < len; i++) {
            if (i == len - 1){
-               middlewares[i].next(new DefaultEnhancer());
+               /**尾链也就是最后一个中间件设置其next为默认的dispatch增强器*/
+               middlewares[i].next(new IDefaultEnhancer());
            }else{
+               /**否则设置当前中间件的next为下一个中间件，用链条串联每一个中间件*/
                middlewares[i].next(middlewares[i+1]);
            }
         }
@@ -52,6 +55,7 @@ public class ApplyMiddlewares implements IStore {
         if (this.middlewares.length == 0){
             throw  new RuntimeException("中间件不能为空！");
         }
+        /**链式调用第一个中间件即可*/
         SyncAction syncAction = middlewares[0].enhancerDispatch(delegate, action);
         return syncAction;
     }

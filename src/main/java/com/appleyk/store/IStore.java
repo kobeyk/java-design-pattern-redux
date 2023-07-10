@@ -6,7 +6,7 @@ import com.appleyk.listener.IReduxListener;
 import com.appleyk.reducer.IReduxReducer;
 
 /**
- * <p></p>
+ * <p>store（状态管理器）定义</p>
  *
  * @author Appleyk
  * @version v1.0
@@ -19,6 +19,6 @@ public interface IStore {
     void setState(int state);
     SyncAction dispatch(IReduxAction action) throws Exception;
     default IReduxReducer getReducer(){return null;}
-    void subscribe(IReduxListener listener);
-    void removeListener(IReduxListener listener);
+    default void subscribe(IReduxListener listener){}
+    default void removeListener(IReduxListener listener){}
 }

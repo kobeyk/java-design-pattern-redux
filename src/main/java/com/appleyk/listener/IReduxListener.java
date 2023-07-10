@@ -1,7 +1,7 @@
 package com.appleyk.listener;
 
 /**
- * <p></p>
+ * <p>状态变更监听器</p>
  *
  * @author Appleyk
  * @version v1.0
