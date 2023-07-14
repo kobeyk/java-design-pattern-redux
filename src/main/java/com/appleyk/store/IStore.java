@@ -6,7 +6,7 @@ import com.appleyk.listener.IReduxListener;
 import com.appleyk.reducer.IReduxReducer;
 
 /**
- * <p>store（状态管理器）定义</p>
+ * <p>store（状态管理器）操作定义</p>
  *
  * @author Appleyk
  * @version v1.0

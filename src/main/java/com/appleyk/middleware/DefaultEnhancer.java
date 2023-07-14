@@ -14,7 +14,7 @@ import com.appleyk.store.IStore;
  * @github https://github.com/kobeyk
  * @date created on 2023/7/9:21:05
  */
-public class IDefaultEnhancer implements IDispatchEnhancer {
+public class DefaultEnhancer implements IDispatchEnhancer {
 
     @Override
     public SyncAction enhancerDispatch(IStore store, IReduxAction action) throws Exception {

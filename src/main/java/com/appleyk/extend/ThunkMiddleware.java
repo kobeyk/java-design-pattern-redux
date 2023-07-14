@@ -37,6 +37,7 @@ public class ThunkMiddleware implements IDispatchEnhancer {
     public SyncAction enhancerDispatch(IStore store, IReduxAction action) throws Exception {
         System.out.println("thunk中间件开始执行...");
         long start = System.currentTimeMillis();
+        /**如果异步action，这里thunk中间件要自己处理下然后交给下一个中间件，如果不是直接交给下一个中间件*/
         if (action instanceof AsyncAction){
             Future<Integer> future = dispatchAsync((AsyncAction) action);
             Integer newState = future.get();

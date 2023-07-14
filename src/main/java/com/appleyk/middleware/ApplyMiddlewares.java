@@ -32,7 +32,7 @@ public class ApplyMiddlewares implements IStore {
         for (int i = 0; i < len; i++) {
            if (i == len - 1){
                /**尾链也就是最后一个中间件设置其next为默认的dispatch增强器*/
-               middlewares[i].next(new IDefaultEnhancer());
+               middlewares[i].next(new DefaultEnhancer());
            }else{
                /**否则设置当前中间件的next为下一个中间件，用链条串联每一个中间件*/
                middlewares[i].next(middlewares[i+1]);

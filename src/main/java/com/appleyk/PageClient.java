@@ -4,7 +4,7 @@ import com.appleyk.action.AsyncAction;
 import com.appleyk.action.SyncAction;
 import com.appleyk.extend.LoggerAMiddleware;
 import com.appleyk.middleware.ApplyMiddlewares;
-import com.appleyk.middleware.IDefaultEnhancer;
+import com.appleyk.middleware.DefaultEnhancer;
 import com.appleyk.extend.LoggerBMiddleware;
 import com.appleyk.extend.ThunkMiddleware;
 import com.appleyk.reducer.CountReducer;
@@ -52,7 +52,7 @@ public class PageClient {
 
     /**测试同步Action（带中间件，v2.0版本测试遗留）*/
     public static void testSyncActionPlus() throws Exception{
-        LoggerBMiddleware loggerBMiddleware = new LoggerBMiddleware(new IDefaultEnhancer());
+        LoggerBMiddleware loggerBMiddleware = new LoggerBMiddleware(new DefaultEnhancer());
         ApplyMiddlewares applyMiddlewares = new ApplyMiddlewares(loggerBMiddleware);
         ReduxStore store = new ReduxStore(reducer,applyMiddlewares);
         SyncAction action = store.dispatch(new SyncAction(CountReducer.ADD, 20));
@@ -62,7 +62,6 @@ public class PageClient {
 
     /**测试异步Action（带中间件，v2.0版本测试遗留）*/
     public static void testAsyncActionPlus() throws Exception{
-
         LoggerBMiddleware loggerBMiddleware = new LoggerBMiddleware();
         ThunkMiddleware thunkMiddleware = new ThunkMiddleware();
         LoggerAMiddleware loggerAMiddleware = new LoggerAMiddleware();
